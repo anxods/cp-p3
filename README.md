@@ -43,17 +43,19 @@ And a file writer (file_service:start_file_writer(File)), that accepts the follo
 - stop
 - abort, stops the writer and removes the file.
 
-- [ ] Exercise 1 (Write a concurrent compression function) Compression uses a single process running in comp_loop. This function may be called from comp(File), and comp(File,
-Chunk_Size). Write two concurrent versions comp_proc(File, Procs) and comp_proc(File,
-Chunk_Size, Procs) that compress File using Procs processes. Make sure that all the processes
+- [ ] **Exercise 1 (Write a concurrent compression function)** Compression uses a single process running in comp_loop. This function may be called from **comp(File)**, and **comp(File,
+Chunk_Size)**. Write two concurrent versions **comp_proc(File, Procs)** and **comp_proc(File,
+Chunk_Size, Procs)** that compress File using Procs processes. Make sure that all the processes
 created during the compression process stop when the compression ends.
 
-- [ ] Exercise 2 (Write a concurrent decompression function) Decompression also takes place in
-a single process in decomp_loop. This function is called from decomp(Archive) and decomp(Archive,
-Output_File). Write two concurrent versions decomp_proc(Archive, Procs) and decomp_proc(Archive,
-Output_file, Procs) that decompress Archive using Proc processes. All the processes started
+- [ ] **Exercise 2 (Write a concurrent decompression function)** Decompression also takes place in
+a single process in decomp_loop. This function is called from **decomp(Archive)** and **decomp(Archive,
+Output_File)**. Write two concurrent versions **decomp_proc(Archive, Procs)** and **decomp_proc(Archive,
+Output_file, Procs)** that decompress Archive using Proc processes. All the processes started
 should stop when the decompression ends.
-Checking that all processes stop
-Use the debugger (debugger:start() to check if all processes finish correctly. The debugger
-will list all processes running in the modules selected in the menu modules=>interpret. Use that
+
+**Checking that all processes stop**
+
+Use the debugger (**debugger:start()** to check if all processes finish correctly. The debugger
+will list all processes running in the modules selected in the menu **modules=>interpret**. Use that
 option to check if all the processes have finished when the compression/decompression is done.
