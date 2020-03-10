@@ -39,9 +39,9 @@ archive:start_archive_reader(File), with the same API as the previous file reade
 - stop
 
 And a file writer (file_service:start_file_writer(File)), that accepts the following messages:
-{add_chunk, Offset, Data}, adds a chunk of data in the current position.
-stop
-abort, stops the writer and removes the file.
+- {add_chunk, Offset, Data}, adds a chunk of data in the current position.
+- stop
+- abort, stops the writer and removes the file.
 
 - [ ] Exercise 1 (Write a concurrent compression function) Compression uses a single process running in comp_loop. This function may be called from comp(File), and comp(File,
 Chunk_Size). Write two concurrent versions comp_proc(File, Procs) and comp_proc(File,
