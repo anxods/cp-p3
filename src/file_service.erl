@@ -33,19 +33,13 @@ init_file_reader(File, Chunk_Size, From) -> %% Init file reader. Opens the file
 file_reader_loop(IoDev, Chunk_Size, Chunk_Number) ->  %% Read chunks until done.
     receive
         {get_chunk, From} ->
-            case file:position(IoDev, cur) of
-                {ok, Offset} ->
-                    case file:read(IoDev, Chunk_Size) of
-                        {ok, Data} ->
-                            From ! {chunk, Chunk_Number, Offset, Data},
-                            file_reader_loop(IoDev, Chunk_Size, Chunk_Number+1);
-                        eof ->
-                            From ! eof,
-                            file_reader_loop(IoDev, Chunk_Size, Chunk_Number);
-                        {error, Reason} ->
-                            From ! {error, Reason},
-                            file_reader_loop(IoDev, Chunk_Size, Chunk_Number)
-                    end;
+            case file:read(IoDev, Chunk_Size) of
+                {ok, Data} ->
+                    From ! {chunk, Chunk_Number, Data},
+                    file_reader_loop(IoDev, Chunk_Size, Chunk_Number+1);
+                eof ->
+                    From ! eof,
+                    file_reader_loop(IoDev, Chunk_Size, Chunk_Number);
                 {error, Reason} ->
                     From ! {error, Reason},
                     file_reader_loop(IoDev, Chunk_Size, Chunk_Number)
@@ -70,7 +64,7 @@ stop_file_writer(Writer) ->
         file_writer_stopped -> ok
     end.
 
-init_file_writer(File, From) ->  %% Open File. File is deleted if it already exists
+init_file_writer(File, From) ->  %% Open File. File is deleted if it already exists 
     case file:open(File, [write, binary]) of
         {ok, IoDev} ->
             From ! file_writer_init_ok,
@@ -78,11 +72,10 @@ init_file_writer(File, From) ->  %% Open File. File is deleted if it already exi
         {error, Reason} ->
             From ! {file_writer_init_error, Reason}
     end.
-
+    
 file_writer_loop(IoDev, File) ->
     receive
-        {write_chunk, Offset, Data} ->
-            file:position(IoDev, {bof, Offset}),
+        {write_chunk, Data} ->
             file:write(IoDev, Data),
             file_writer_loop(IoDev, File);
         stop ->
